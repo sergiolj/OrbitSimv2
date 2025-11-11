@@ -33,12 +33,6 @@ public class ColorRGB {
         this.BASE_COLOR_PALETTE = new ColorRGB(r,g,b,variance);
     }
 
-    public ColorRGB(ColorRGB colorRGB){
-        this.r = colorRGB.getR();
-        this.g = colorRGB.getG();
-        this.b = colorRGB.getB();
-    }
-
     public int getR() {
         return r;
     }
@@ -51,18 +45,6 @@ public class ColorRGB {
         return b;
     }
 
-    public int getVariance() {
-        return variance;
-    }
-
-    public ColorRGB genColor() {
-        ColorRGB colorRandom;
-        int r = rnd.nextInt(156) + 100;
-        int g = rnd.nextInt(156) + 100;
-        int b = rnd.nextInt(156) + 100;
-        return colorRandom = new ColorRGB(r,g,b);
-    }
-
     public ColorRGB genColor(ColorRGB colorBase, int variance) {
         ColorRGB colorRandom;
         int r = randNear(colorBase.getR(), variance);
@@ -72,7 +54,6 @@ public class ColorRGB {
     }
 
     private int randNear(int baseColor, int variance) {
-
         int min = Math.max(0, baseColor - variance);
         int max = Math.min(255, baseColor + variance);
         return rnd.nextInt((max - min) + 1) + min;

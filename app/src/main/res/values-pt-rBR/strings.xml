@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stop">PARAR</string>
+    <string name="start">INICIAR</string>
+    <string name="vertical">Vertical</string>
+    <string name="speed">Velocidade</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="controls">Controles</string>
+    <string name="exit">SAIR</string>
+    <string name="element">Elemento</string>
+    <string name="geometry">Geometria</string>
+    <string name="settings">Configurações</string>
+    <string name="element_size">Tamanho</string>
+    <string name="minimum">Mínimo</string>
+    <string name="maximum">Máximo</string>
+</resources>
