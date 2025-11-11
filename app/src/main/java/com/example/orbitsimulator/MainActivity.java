@@ -13,8 +13,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.orbitsimulator.canvas.GeometryCanvas;
-import com.example.orbitsimulator.geometry.Geometry;
 import com.example.orbitsimulator.geometry.ElementCircle;
+import com.example.orbitsimulator.geometry.Geometry;
 import com.example.orbitsimulator.util.ColorRGB;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         geometry.setBasePalette(new ColorRGB(50,100,200));
 
         //Uso de method reference para passar uma Supplier, ou seja uma fábrica de uma determinada classe.
+
         geometry.populateGeometrySet(ElementCircle::new);
         geometry.orbitTraceGeometry();
     }
