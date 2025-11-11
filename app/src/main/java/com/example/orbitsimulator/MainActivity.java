@@ -3,7 +3,6 @@ package com.example.orbitsimulator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -15,10 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.orbitsimulator.canvas.GeometryCanvas;
 import com.example.orbitsimulator.geometry.Geometry;
-import com.example.orbitsimulator.geometry.SolidCircle;
+import com.example.orbitsimulator.geometry.ElementCircle;
 import com.example.orbitsimulator.util.ColorRGB;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,40 +39,24 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        handler = new Handler(Looper.getMainLooper());
+        interfaceInitializer();
+        dataInitializer();
+        animationControl();
 
-        // Ligação das referências dos atributos na Activity
-        canva = findViewById(R.id.geometryCanvas);
+    }
 
-        horizontalScale = findViewById(R.id.sb_horizontalscale);
-        horizontalScale.setMin(1);
-        verticalScale = findViewById(R.id.sb_verticalscale);
-        verticalScale.setMin(1);
-        rotationVelocity = findViewById(R.id.sb_rotationvelocity);
-        rotationVelocity.setMin(0);
-
+    /**
+     * INICIALIZA AS FUNCIONALIDADES DE CONTROLES DA INTERFACE COM O USUÁRIO
+     *
+     */
+    private void interfaceInitializer() {
         Button btnStartBoost = findViewById(R.id.btn_start);
         Button btnStop = findViewById(R.id.btn_stop);
         Button btnExit = findViewById(R.id.btn_exit);
 
-        //Criação dos Arrays com os dados de geometria
-        geometry = Geometry.getInstance();
-
-        geometry.setBasePalette(new ColorRGB(50,100,200));
-        //Uso de method reference para passar uma Supplier, ou seja uma fábrica de uma determinada classe.
-
-        geometry.populateGeometrySet(SolidCircle::new);
-        geometry.orbitTraceGeometry();
-
-        ArrayList<Double> orbit = geometry.orbitTraceGeometry();
-        String TAG = "Debug geometria Orbit";
-        Log.d(TAG, orbit.toString());
-        scaleWatcher();
-        beginTimer();
-
         btnStartBoost.setOnClickListener(v ->{
-                spinning =  true;
-                beginTimer();
+            spinning =  true;
+            animationControl();
         });
         btnStop.setOnClickListener(v -> spinning=false);
 
@@ -83,17 +64,102 @@ public class MainActivity extends AppCompatActivity {
             if(handler != null){
                 handler.removeCallbacksAndMessages(null);
             }
-            finishAffinity();
-            //finish();
+            finish();
+        });
+
+        scaleWatcher();
+    }
+
+    /**
+     * INICIALIZA AS REFERÊNCIAS DOS DADOS GEOMÉTRICOS A SEREM UTILIZADOS NO SISTEMA
+     */
+    private void dataInitializer() {
+        canva = findViewById(R.id.geometryCanvas);
+
+        geometry = Geometry.getInstance();
+        geometry.setBasePalette(new ColorRGB(50,100,200));
+
+        //Uso de method reference para passar uma Supplier, ou seja uma fábrica de uma determinada classe.
+        geometry.populateGeometrySet(ElementCircle::new);
+        geometry.orbitTraceGeometry();
+    }
+
+
+    /**
+     * INICIALIZA A THREAD QUE CONTROLA A ANIMAÇÃO/ ATUALIZAÇÃO DAS POSIÇÕES DAS ÓRBITAS
+     */
+    private void animationControl() {
+        handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                geometry.move((float) rotationVelocity.getProgress() / 10);
+                if (spinning) {
+                    handler.postDelayed(this, 15);
+                }
+                canva.updateImage();
+            }
+        });
+    }
+
+    /**
+     * IMPLEMENTAÇÃO DE LISTENER PARA OS SEEKBARS
+     * Diferentemente do botão que é uma interface com apenas um método implementado
+     * (interface funcional) o seekbar possui três métodos (interface não-funcional), o que impede o
+     * uso de lambda para a implementação, pois todos os métodos da classe
+     * tem que ser sobreescritos, mesmo que sem funcionalidades.
+     *
+     * A implementação dessa forma permite que a escala do canva seja alterada pelo usuário mesmo
+     * que a atualização das posições das órbitas não esteja sendo executada.
+     */
+    private void scaleWatcher() {
+        horizontalScale = findViewById(R.id.sb_horizontalscale);
+        horizontalScale.setMin(1);
+        verticalScale = findViewById(R.id.sb_verticalscale);
+        verticalScale.setMin(1);
+        rotationVelocity = findViewById(R.id.sb_rotationvelocity);
+        rotationVelocity.setMin(0);
+
+        horizontalScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                geometry.setScaleX((float) horizontalScale.getProgress() / 50);
+                canva.updateImage();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        verticalScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                geometry.setScaleY((float) verticalScale.getProgress() / 50);
+                canva.updateImage();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
         });
 
     }
 
-    private void scaleWatcher() {
-
-    }
-
-    @Override
+@Override
     protected void onPause() {
         super.onPause();
         spinning = false;
@@ -102,19 +168,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void beginTimer() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                geometry.boost((float) rotationVelocity.getProgress() / 10);
-                geometry.setScaleX((float) horizontalScale.getProgress() / 50);
-                geometry.setScaleY((float) verticalScale.getProgress() / 50);
-                if (spinning) {
-                    handler.postDelayed(this, 15);
-                }
-                canva.updateImage();
-
-            }
-        });
-    }
+//    TRECHO DE CÓDIGO USADO APENAS PARA DEBUG MANTIDO COMO EXEMPLO PARA USOS FUTUROS
+//        ArrayList<Double> orbit = geometry.orbitTraceGeometry();
+//        String TAG = "Debug geometria Orbit";
+//        Log.d(TAG, orbit.toString());
 }

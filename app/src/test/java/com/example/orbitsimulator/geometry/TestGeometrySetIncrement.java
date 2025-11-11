@@ -70,7 +70,7 @@ public class TestGeometrySetIncrement {
         geometry.setDisplacementSum(20.0); // Assumindo acesso package-private
 
         // --- Act ---
-        ArrayList<ElementTypes> resultList = geometry.getGeometrySetIncrement();
+        ArrayList<ElementTypes> resultList = geometry.getGeometrySet();
 
         // --- Assert ---
 

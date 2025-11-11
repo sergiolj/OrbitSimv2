@@ -7,24 +7,18 @@ import com.example.orbitsimulator.util.PolarCoord;
 
 import java.util.Random;
 
-public class SolidCircle implements ElementTypes {
+public class ElementCircle implements ElementTypes {
     private int size;
     private ColorRGB color;
     private PolarCoord position;
-    private final int MIN_SIZE = 1;
+    private final int MIN_SIZE = 5;
     private final int MAX_SIZE = 25;
     private final Random rnd = new Random();
 
-    public SolidCircle(){
+    public ElementCircle(){
         this.color = new ColorRGB();
         this.position = new PolarCoord();
         this.size = genSize(); // default
-    }
-
-    public SolidCircle(SolidCircle c){
-        this.color = new ColorRGB(c.color.getR(),c.color.getB(),c.color.getB());
-        this.position = new PolarCoord(c.position.getRadius(), c.position.getAngle());
-        this.size = c.size; // default
     }
 
     public int getSize() {

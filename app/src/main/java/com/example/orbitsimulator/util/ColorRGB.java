@@ -78,7 +78,6 @@ public class ColorRGB {
         return rnd.nextInt((max - min) + 1) + min;
     }
 
-
     /**
      * O format() com o valor X ou x formata o inteiro indicado em Hexadecimal
      *  "%02X" significa:
