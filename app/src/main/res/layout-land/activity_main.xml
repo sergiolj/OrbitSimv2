@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,32 +9,33 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-    android:id="@+id/main_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-        <include
-            android:id="@+id/main_view_canva"
-            layout="@layout/main_view"
-            android:layout_width="match_parent"
-            android:layout_height="400dp">
-        </include>
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <include
             android:id="@+id/main_controls"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            layout="@layout/main_controls">
+            layout="@layout/main_controls"
+            android:layout_width="350dp"
+            android:layout_height="match_parent">
+
+        </include>
+        <include
+            android:id="@+id/main_view_canva"
+            layout="@layout/main_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
         </include>
 
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fragment_settings"
+        android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:layout_height="400dp"
         android:layout_width="match_parent">
     </FrameLayout>
 

@@ -2,4 +2,5 @@
 <resources>
     <dimen name="button_text_size">10sp</dimen>
     <dimen name="margin_End">5dp</dimen>
+    <dimen name="peek_height">50dp</dimen>
 </resources>

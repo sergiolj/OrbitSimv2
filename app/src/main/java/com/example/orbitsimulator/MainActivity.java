@@ -15,12 +15,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.orbitsimulator.canvas.GeometryCanvas;
+import com.example.orbitsimulator.fragment.SettingsFragment;
 import com.example.orbitsimulator.geometry.ElementCircle;
 import com.example.orbitsimulator.geometry.Geometry;
 import com.example.orbitsimulator.util.ColorRGB;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.skydoves.colorpickerview.ColorPickerView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SettingsFragment.OnColorSelectedListener {
 
     private Geometry geometry;
     private boolean spinning = false;
@@ -29,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar verticalScale;
     private SeekBar rotationVelocity;
     private GeometryCanvas canva;
-
-
     private BottomSheetBehavior<View> bottomSheetBehavior;
+    private ColorPickerView colorPickerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +53,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void fragmentInitializer() {
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_settings, new SettingsFragment())
+                .commit();
+
         View bottomSheet = findViewById(R.id.fragment_settings);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-//        bottomSheet.post(() -> {
-//            int peekHeight = (int) (getResources().getDisplayMetrics().density * 150); // 10 + margens
-//            bottomSheetBehavior.setPeekHeight(peekHeight, false);
-//        });
-
-        bottomSheetBehavior.setPeekHeight(400,true);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        bottomSheetBehavior.setHideable(false);
-
+        bottomSheet.post(()->{
+            //Usa uma dimensão diferente para landscape e portrait usando dimens.xml
+            bottomSheetBehavior.setPeekHeight(
+                    (int) getResources().getDimension(R.dimen.peek_height),
+                    true);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            bottomSheetBehavior.setHideable(false);
+        });
     }
 
     /**
@@ -181,8 +188,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    @Override
+    public void onColorSelected(int color) {
+        // Aqui você pode aplicar o setter na sua classe Geometry
+        //O formato de cor usado pelo colorpicker é ARGB
+        // Necessário conversão
+        //ColorRGB colorRGB = new ColorRGB(color);
 
-@Override
+        //geometry.setBasePalette(colorRGB);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         spinning = false;
@@ -191,8 +207,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
 //    TRECHO DE CÓDIGO USADO APENAS PARA DEBUG MANTIDO COMO EXEMPLO PARA USOS FUTUROS
 //        ArrayList<Double> orbit = geometry.orbitTraceGeometry();
 //        String TAG = "Debug geometria Orbit";
 //        Log.d(TAG, orbit.toString());
+
+    //        bottomSheet.post(() -> {
+//            int peekHeight = (int) (getResources().getDisplayMetrics().density * 150); // 10 + margens
+//            bottomSheetBehavior.setPeekHeight(peekHeight, false);
+//        });
 }
