@@ -3,10 +3,12 @@ package com.example.orbitsimulator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +18,7 @@ import com.example.orbitsimulator.canvas.GeometryCanvas;
 import com.example.orbitsimulator.geometry.ElementCircle;
 import com.example.orbitsimulator.geometry.Geometry;
 import com.example.orbitsimulator.util.ColorRGB;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private GeometryCanvas canva;
 
 
+    private BottomSheetBehavior<View> bottomSheetBehavior;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +44,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        fragmentInitializer();
         interfaceInitializer();
         dataInitializer();
         animationControl();
+
+    }
+
+    private void fragmentInitializer() {
+        View bottomSheet = findViewById(R.id.fragment_settings);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+//        bottomSheet.post(() -> {
+//            int peekHeight = (int) (getResources().getDisplayMetrics().density * 150); // 10 + margens
+//            bottomSheetBehavior.setPeekHeight(peekHeight, false);
+//        });
+
+        bottomSheetBehavior.setPeekHeight(400,true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        bottomSheetBehavior.setHideable(false);
 
     }
 
