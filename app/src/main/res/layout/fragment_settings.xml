@@ -66,18 +66,20 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="200dp">
 
             <com.skydoves.colorpickerview.ColorPickerView
                 android:id="@+id/colorPickerView"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
 
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="10dp"
                 android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -117,33 +119,44 @@
                     android:textColor="@color/white" />
 
                 <SeekBar
-                    android:id="@+id/seekBar2"
+                    android:id="@+id/sb_min_size"
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_margin"
                     android:layout_weight="1"
-                    android:max="10"
-                    android:progress="3" />
+                    android:max="30"
+                    android:min="1"
+                    android:progress="1" />
 
                 <TextView
                     android:id="@+id/tv_size_maximum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_margin="@dimen/default_margin"
                     android:layout_weight="1"
                     android:text="@string/maximum"
                     android:textColor="@color/white" />
 
                 <SeekBar
-                    android:id="@+id/seekBar"
+                    android:id="@+id/sb_max_size"
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_margin"
                     android:layout_weight="1"
-                    android:max="10"
-                    android:progress="3" />
+                    android:max="60"
+                    android:min="30"
+                    android:progress="1" />
+
+                <Button
+                    android:id="@+id/btn_aply_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:text="@string/apply_changes" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

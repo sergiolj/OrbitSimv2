@@ -7,22 +7,23 @@ import com.example.orbitsimulator.util.PolarCoord;
 
 import java.util.Random;
 
-public class ElementCircle implements ElementTypes {
+public class Element {
     private int size;
     private ColorRGB color;
+
     private PolarCoord position;
-    private final int MIN_SIZE = 5;
-    private final int MAX_SIZE = 25;
+    private int minSize = 5;
+    private int maxSize = 25;
     private final Random rnd = new Random();
 
     //CONSTRUCTOR
-    public ElementCircle(){
+    public Element(){
         this.color = new ColorRGB();
         this.position = new PolarCoord();
         this.size = genSize(); // default
     }
 
-    //INTERFACE GETTERS
+    //GETTERS
     public int getSize() {
         return size;
     }
@@ -34,12 +35,20 @@ public class ElementCircle implements ElementTypes {
     public PolarCoord getPosition() {
         return position;
     }
+    
 
-    //INTERFACE SETTERS
+    //SETTERS
     public void setSize(int size) {
         this.size = size;
     }
 
+    public void setMinSize(int size) {
+        this.minSize = size;
+    }
+
+    public void setMaxSize(int size) {
+        this.maxSize = size;
+    }
     public void setColor(ColorRGB color) {
         this.color = color;
     }
@@ -48,10 +57,9 @@ public class ElementCircle implements ElementTypes {
         this.position = position;
     }
 
-    //INTERFACE METHODS
-    @Override
+    //METHODS
     public int genSize() {
-        return rnd.nextInt((MAX_SIZE-MIN_SIZE)+1)+MIN_SIZE;
+        return rnd.nextInt((maxSize- minSize)+1)+ minSize;
     }
 
     @NonNull
