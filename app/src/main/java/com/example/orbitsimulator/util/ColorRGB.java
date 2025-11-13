@@ -1,5 +1,7 @@
 package com.example.orbitsimulator.util;
 
+import static java.lang.Math.clamp;
+
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
@@ -13,7 +15,7 @@ public class ColorRGB {
 
     private final Random rnd = new Random();
     private ColorRGB BASE_COLOR_PALETTE = null;
-    private int variance = 25;
+    private int variance = 120;
 
     public ColorRGB(){
         this.r = 0;
