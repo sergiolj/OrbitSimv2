@@ -1,5 +1,9 @@
+package com.example.orbitsimulator.util;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.example.orbitsimulator.geometry.Geometry;  
+import com.example.orbitsimulator.util.ColorRGB;
 
 public class GeometryStorage{
 private static final String PREF_NAME = "geometry_prefs";
