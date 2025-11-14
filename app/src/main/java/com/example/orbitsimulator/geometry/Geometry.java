@@ -11,23 +11,14 @@ import java.util.function.Supplier;
 public class Geometry {
     private static Geometry instance = null;
 
-    private Supplier<ElementTypes> elementFactory;
-
     private static final int NUMBER_OF_ELEMENTS = 1;
     private static final int NUMBER_OF_STRUCTURES = 10;
     private static final double MAX_RADIUS = 1000;
     private ColorRGB basePalette = new ColorRGB();
 
-    /**
-     * Deste modo o arraylist aceita typos de elementos diferentes que implementarem
-     * a interface ElementTypes
-     */
-    private final ArrayList<ElementTypes> geometrySet;
-    /**
-     * Deslocamento acumulado dos elementos em suas órbitas
-     */
-    private double displacementSum;
+    private final ArrayList<Element> geometrySet;
 
+    private double displacementSum;
 
     private double scaleX;
     private double scaleY;
@@ -50,11 +41,9 @@ public class Geometry {
      * Para adicionar uma flexibilidade de tipos geométricos foi necessário criar essa função para
      * possibilitar a injeção do objeto que será criado.
      */
-    public void populateGeometrySet(Supplier<ElementTypes> factory) {
+    public void populateGeometrySet() {
        this.scaleX = 1.0F;
        this.scaleY = 1.0F;
-
-       this.elementFactory = factory;
 
        double radius;
        double angleTeta;
@@ -63,12 +52,12 @@ public class Geometry {
 
         for(int i = 1; i <= NUMBER_OF_STRUCTURES; i++){
             for(int j = 1; j <= NUMBER_OF_ELEMENTS; j++){
-                ElementTypes element = factory.get();
+                Element element = new Element();
                 radius = i * MAX_RADIUS / NUMBER_OF_STRUCTURES;
                 angleTeta = (j - 1) * 2 * Math.PI / NUMBER_OF_ELEMENTS;
 
                 element.setPosition(new PolarCoord(radius,angleTeta));
-                element.setColor(basePalette.genColor(basePalette,25));
+                element.setColor(basePalette.genColor(basePalette,basePalette.getVariance()));
                 this.geometrySet.add(element);
 
             }
@@ -108,20 +97,37 @@ public class Geometry {
      * apenas foram atualizadas as posições dos elementos do array principal geometrySet.
      */
     public void updateGeometrySet(){
-            for(ElementTypes element : this.geometrySet){
+            for(Element element : this.geometrySet){
                 PolarCoord oldPos = element.getPosition();
                 double newAngle = oldPos.getAngle() + displacementSum/ oldPos.getRadius();
                 oldPos.setAngle(newAngle);
             }
     }
 
+    public void updateGeometryColor(){
+        for(Element element: this.geometrySet){
+            element.setColor(basePalette.genColor(basePalette,25));
+        }
+    }
+
+    public void updateGeometrySize(int min, int max){
+        for(Element element: this.geometrySet){
+            element.setMinSize(min);
+            element.setMaxSize(max);
+            element.setSize(element.genSize());
+        }
+    }
+
     //GETTERS
-    public ArrayList<ElementTypes> getGeometrySet() {
+    public ArrayList<Element> getGeometrySet() {
         return geometrySet;
     }
 
     public double getScaleX() {
         return scaleX;
+    }
+    public double getScaleY() {
+        return scaleY;
     }
 
     //SETTERS
@@ -129,20 +135,8 @@ public class Geometry {
         this.scaleX = scaleX;
     }
 
-    public double getScaleY() {
-        return scaleY;
-    }
-
     public void setScaleY(double scaleY) {
         this.scaleY = scaleY;
-    }
-
-    public void setElementFactory(Supplier<ElementTypes> elementFactory) {
-        this.elementFactory = elementFactory;
-    }
-
-    public void setDisplacementSum(double displacementSum) {
-        this.displacementSum = displacementSum;
     }
 
     public void setBasePalette(ColorRGB basePalette) {
@@ -155,35 +149,6 @@ public class Geometry {
         return geometrySet.toString();
     }
 
-    /**
-     * Esse método havia sido criado em substituição/adaptação ao original getTodasAsBolas()
-     * da versão apresentada em aula que resultava na criação de um novo array a cada 15 milisegundos
-     * o que foi considerado ineficiente e desnecessário, sendo substituído pelo método
-     * updateGeometrySet().
-     * Foi mantido apenas para ilustração da evolução da lógica de programação.
-     * @return
-     */
-    @Deprecated
-    public ArrayList<ElementTypes> getGeometrySetIncrement(){
-        ArrayList<ElementTypes> geometrySetNewPositions = new ArrayList<>();
-        if(this.elementFactory != null){
-            for(ElementTypes element : this.geometrySet){
-                ElementTypes newElement = this.elementFactory.get();
-                newElement.setColor(element.getColor());
-                newElement.setSize(element.getSize());
-
-                PolarCoord oldPos = element.getPosition();
-                double newAngle = oldPos.getAngle() + displacementSum/ oldPos.getRadius();
-
-                newElement.setPosition(new PolarCoord(oldPos.getRadius(), newAngle));
-
-                geometrySetNewPositions.add(newElement);
-            }
-        } else{
-            throw new RuntimeException("elementFactory não foi inicializado.");
-        }
-        return geometrySetNewPositions;
-    }
 }
 
 

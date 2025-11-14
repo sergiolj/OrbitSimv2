@@ -11,7 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.orbitsimulator.geometry.ElementTypes;
+import com.example.orbitsimulator.geometry.Element;
 import com.example.orbitsimulator.geometry.Geometry;
 
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ public class GeometryCanvas extends View {
 
         float sx = (float) geometry.getScaleX();
         float sy = (float) geometry.getScaleY();
-        for (ElementTypes element : geometry.getGeometrySet()) {
+        for (Element element : geometry.getGeometrySet()) {
             r = (float) element.getPosition().getRadius();
             teta = (float) element.getPosition().getAngle();
 
@@ -139,7 +139,7 @@ public class GeometryCanvas extends View {
 
         float sx = (float) geometry.getScaleX();
         float sy = (float) geometry.getScaleY();
-        for (ElementTypes element : geometry.getGeometrySet()) {
+        for (Element element : geometry.getGeometrySet()) {
             r = (float) element.getPosition().getRadius();
             teta = (float) element.getPosition().getAngle();
 

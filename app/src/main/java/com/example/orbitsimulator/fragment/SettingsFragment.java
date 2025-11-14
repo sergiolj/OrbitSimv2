@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,17 +19,18 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 public class SettingsFragment extends Fragment {
 
-    private OnColorSelectedListener listener;
+    private OnSettingsSelectedListener listener;
 
-    public interface OnColorSelectedListener{
+    public interface OnSettingsSelectedListener {
+        void onSizeChange(int min, int max);
         void onColorSelected(int color);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof OnColorSelectedListener){
-            listener = (OnColorSelectedListener) context;
+        if(context instanceof OnSettingsSelectedListener){
+            listener = (OnSettingsSelectedListener) context;
         }else{
             throw new RuntimeException(context.toString() +
                     "Must implement OnColorSelectedListener");
@@ -51,5 +54,16 @@ public class SettingsFragment extends Fragment {
                 listener.onColorSelected(color);
             }
         });
+
+        SeekBar sbMinSize = view.findViewById(R.id.sb_min_size);
+        SeekBar sbMaxSize = view.findViewById(R.id.sb_max_size);
+        Button btSizeChange = view.findViewById(R.id.btn_aply_settings);
+
+        btSizeChange.setOnClickListener(v -> {
+            if(listener!=null){
+                listener.onSizeChange(sbMinSize.getProgress(), sbMaxSize.getProgress());
+            }
+        });
+
     }
 }

@@ -13,5 +13,6 @@
     <string name="element_size">Size</string>
     <string name="minimum">Minimum</string>
     <string name="maximum">Maximum</string>
-    <string name="configuration">Configuration</string>
+    <string name="configuration">Settings</string>
+    <string name="apply_changes">Change Size</string>
 </resources>

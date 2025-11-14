@@ -1,5 +1,9 @@
 package com.example.orbitsimulator.util;
 
+import static java.lang.Math.clamp;
+
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 
 import java.util.Random;
@@ -11,7 +15,7 @@ public class ColorRGB {
 
     private final Random rnd = new Random();
     private ColorRGB BASE_COLOR_PALETTE = null;
-    private int variance = 25;
+    private int variance = 120;
 
     public ColorRGB(){
         this.r = 0;
@@ -31,6 +35,16 @@ public class ColorRGB {
         this.b = b;
         this.variance = variance;
         this.BASE_COLOR_PALETTE = new ColorRGB(r,g,b,variance);
+    }
+
+    public ColorRGB(int color){
+        this.r = Color.red(color);
+        this.g = Color.green(color);
+        this.b = Color.blue(color);
+    }
+
+    public static ColorRGB fromInt(int color){
+        return new ColorRGB(color);
     }
 
     public int getR() {
@@ -59,6 +73,10 @@ public class ColorRGB {
         return rnd.nextInt((max - min) + 1) + min;
     }
 
+    public int getVariance() {
+        return variance;
+    }
+
     /**
      * O format() com o valor X ou x formata o inteiro indicado em Hexadecimal
      *  "%02X" significa:
@@ -72,6 +90,4 @@ public class ColorRGB {
     public String toString() {
         return String.format("#%02X%02X%02X", r, g, b);
     }
-
-
 }

@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.SeekBar;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,15 +15,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.orbitsimulator.canvas.GeometryCanvas;
 import com.example.orbitsimulator.fragment.SettingsFragment;
-import com.example.orbitsimulator.geometry.ElementCircle;
+import com.example.orbitsimulator.geometry.Element;
 import com.example.orbitsimulator.geometry.Geometry;
 import com.example.orbitsimulator.util.ColorRGB;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.skydoves.colorpickerview.ColorPickerView;
 
-public class MainActivity extends AppCompatActivity implements SettingsFragment.OnColorSelectedListener {
+public class MainActivity extends AppCompatActivity implements SettingsFragment.OnSettingsSelectedListener {
 
     private Geometry geometry;
+    
     private boolean spinning = false;
     private Handler handler;
     private SeekBar horizontalScale;
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     private SeekBar rotationVelocity;
     private GeometryCanvas canva;
     private BottomSheetBehavior<View> bottomSheetBehavior;
-    private ColorPickerView colorPickerView;
 
 
     @Override
@@ -107,11 +106,8 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         canva = findViewById(R.id.geometryCanvas);
 
         geometry = Geometry.getInstance();
-        geometry.setBasePalette(new ColorRGB(50,100,200));
 
-        //Uso de method reference para passar uma Supplier, ou seja uma fábrica de uma determinada classe.
-
-        geometry.populateGeometrySet(ElementCircle::new);
+        geometry.populateGeometrySet();
         geometry.orbitTraceGeometry();
     }
 
@@ -189,14 +185,19 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         });
 
     }
+
+    @Override
+    public void onSizeChange(int min, int max) {
+        geometry.updateGeometrySize(min, max);
+        canva.updateImage();
+    }
+
     @Override
     public void onColorSelected(int color) {
-        // Aqui você pode aplicar o setter na sua classe Geometry
-        //O formato de cor usado pelo colorpicker é ARGB
-        // Necessário conversão
-        //ColorRGB colorRGB = new ColorRGB(color);
-
-        //geometry.setBasePalette(colorRGB);
+        ColorRGB.fromInt(color);
+        geometry.setBasePalette(ColorRGB.fromInt(color));
+        geometry.updateGeometryColor();
+        canva.updateImage();
     }
 
     @Override
