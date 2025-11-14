@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         fragmentInitializer();
         interfaceInitializer();
         dataInitializer();
+        GeometryStorage.loadGeometry(this, geometry);
         animationControl();
 
     }
@@ -200,6 +201,14 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
     @Override
     protected void onPause() {
+        GeometryStorage.saveGeometry(
+            this,
+            geometry.getScaleX(),
+            geometry.getScaleY(),
+            0, // ou geometry.getDisplacementSum() se quiser salvar a velocidade
+            new ColorRGB(50,100,200) // ou geometry.getBasePalette()
+        );
+
         super.onPause();
         spinning = false;
         if(handler != null){
