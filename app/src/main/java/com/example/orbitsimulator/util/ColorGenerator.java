@@ -14,7 +14,6 @@ public class ColorGenerator {
         int r = rnd.nextInt(256);
         int g = rnd.nextInt(256);
         int b = rnd.nextInt(256);
-
         return Color.rgb(r,g,b);
     }
 

@@ -44,8 +44,6 @@ public class Geometry {
 
     /**
      * CRIAÇÃO DO ELEMENTO PARA O DESENHO DOS OBJETOS NAS ÓRBITAS
-     * Para adicionar uma flexibilidade de tipos geométricos foi necessário criar essa função para
-     * possibilitar a injeção do objeto que será criado.
      */
     public void populateGeometrySet() {
        this.scaleX = 1.0F;
@@ -55,6 +53,7 @@ public class Geometry {
        double angleTeta;
 
        this.geometrySet.clear();
+
        ColorGenerator cg = new ColorGenerator();
        SizeGenerator sg = new SizeGenerator(elementMinSize,elementMaxSize);
 
@@ -64,9 +63,9 @@ public class Geometry {
                 radius = i * MAX_RADIUS / NUMBER_OF_STRUCTURES;
                 angleTeta = (j - 1) * 2 * Math.PI / NUMBER_OF_ELEMENTS;
 
-                element.setPosition(new PolarCoordinates(radius,angleTeta));
+                element.setPosition(new PolarCoordinates(radius, angleTeta));
                 element.setColor(cg.genRandColor());
-                Log.d("ELEMENT COLOR", "Element color: "+ element.getColor());
+                //Log.d("ELEMENT COLOR", "Element color: "+ element.getColor());
                 element.setSize(sg.genSize());
                 this.geometrySet.add(element);
             }
@@ -85,10 +84,6 @@ public class Geometry {
             radius = i * MAX_RADIUS / NUMBER_OF_STRUCTURES;
             orbitRadius.add(radius);
         }
-    }
-
-    public ArrayList<Double> getOrbitRadius() {
-        return orbitRadius;
     }
 
     /**
@@ -113,6 +108,8 @@ public class Geometry {
                 oldPos.setAngle(newAngle);
             }
     }
+
+    //MÉTODOS DE ATUALIZAÇÃO DE DADOS USADOS PELO LISTENER DA FRAGMENT
 
     public void updateGeometryColor(int selectColor){
         ColorGenerator cg = new ColorGenerator();
@@ -143,8 +140,13 @@ public class Geometry {
     public double getScaleX() {
         return scaleX;
     }
+
     public double getScaleY() {
         return scaleY;
+    }
+
+    public ArrayList<Double> getOrbitRadius() {
+        return orbitRadius;
     }
 
     //SETTERS
@@ -155,7 +157,6 @@ public class Geometry {
     public void setScaleY(double scaleY) {
         this.scaleY = scaleY;
     }
-
 
     @NonNull
     @Override
