@@ -2,64 +2,38 @@ package com.example.orbitsimulator.geometry;
 
 import androidx.annotation.NonNull;
 
-import com.example.orbitsimulator.util.ColorRGB;
-import com.example.orbitsimulator.util.PolarCoord;
-
-import java.util.Random;
+import com.example.orbitsimulator.util.PolarCoordinates;
 
 public class Element {
     private int size;
-    private ColorRGB color;
+    private int color;
+    private PolarCoordinates position;
 
-    private PolarCoord position;
-    private int minSize = 5;
-    private int maxSize = 25;
-    private final Random rnd = new Random();
-
-    //CONSTRUCTOR
     public Element(){
-        this.color = new ColorRGB();
-        this.position = new PolarCoord();
-        this.size = genSize(); // default
     }
 
-    //GETTERS
     public int getSize() {
         return size;
     }
 
-    public ColorRGB getColor() {
+    public int getColor() {
         return color;
     }
 
-    public PolarCoord getPosition() {
+    public PolarCoordinates getPosition() {
         return position;
     }
-    
 
-    //SETTERS
     public void setSize(int size) {
         this.size = size;
     }
 
-    public void setMinSize(int size) {
-        this.minSize = size;
-    }
-
-    public void setMaxSize(int size) {
-        this.maxSize = size;
-    }
-    public void setColor(ColorRGB color) {
+    public void setColor(int color) {
         this.color = color;
     }
 
-    public void setPosition(PolarCoord position) {
+    public void setPosition(PolarCoordinates position) {
         this.position = position;
-    }
-
-    //METHODS
-    public int genSize() {
-        return rnd.nextInt((maxSize- minSize)+1)+ minSize;
     }
 
     @NonNull

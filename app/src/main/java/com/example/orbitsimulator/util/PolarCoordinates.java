@@ -1,14 +1,15 @@
 package com.example.orbitsimulator.util;
 
-public class PolarCoord {
+public class PolarCoordinates {
     private double radius;
     private double angle;
 
-    public PolarCoord(double radius, double angle) {
+    public PolarCoordinates(double radius, double angle) {
         this.radius = radius;
+
         this.angle = angle;
     }
-    public PolarCoord(){
+    public PolarCoordinates(){
         this.radius = 0;
         this.angle = 0;
     }
