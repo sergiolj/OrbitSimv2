@@ -1,4 +1,4 @@
-package com.example.orbitsimulator;
+package br.edu.ucsal.sergiolj.orbitSimulator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import android.graphics.Color;
 
-import com.example.orbitsimulator.util.ColorGenerator;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.ColorGenerator;
 
 public class TestColorGenerator {
 

@@ -1,8 +1,8 @@
-package com.example.orbitsimulator.geometry;
+package br.edu.ucsal.sergiolj.orbitSimulator.geometry;
 
 import androidx.annotation.NonNull;
 
-import com.example.orbitsimulator.util.PolarCoordinates;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.PolarCoordinates;
 
 public class Element {
     private int size;

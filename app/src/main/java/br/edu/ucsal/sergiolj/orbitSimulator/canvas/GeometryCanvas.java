@@ -1,4 +1,4 @@
-package com.example.orbitsimulator.canvas;
+package br.edu.ucsal.sergiolj.orbitSimulator.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,8 +12,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.orbitsimulator.geometry.Element;
-import com.example.orbitsimulator.geometry.Geometry;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Element;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
 
 import java.util.ArrayList;
 

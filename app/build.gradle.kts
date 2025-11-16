@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.orbitsimulator"
+    namespace = "br.edu.ucsal.sergiolj.orbitSimulator"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.orbitsimulator"
+        applicationId = "br.edu.ucsal.sergiolj.orbitSimulator"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

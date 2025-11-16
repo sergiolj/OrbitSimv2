@@ -1,12 +1,10 @@
-package com.example.orbitsimulator.geometry;
-
-import android.util.Log;
+package br.edu.ucsal.sergiolj.orbitSimulator.geometry;
 
 import androidx.annotation.NonNull;
 
-import com.example.orbitsimulator.util.ColorGenerator;
-import com.example.orbitsimulator.util.PolarCoordinates;
-import com.example.orbitsimulator.util.SizeGenerator;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.ColorGenerator;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.PolarCoordinates;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.SizeGenerator;
 
 import java.util.ArrayList;
 

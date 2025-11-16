@@ -1,4 +1,4 @@
-package com.example.orbitsimulator.util;
+package br.edu.ucsal.sergiolj.orbitSimulator.util;
 
 import android.graphics.Color;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package com.example.orbitsimulator.fragment;
+package br.edu.ucsal.sergiolj.orbitSimulator.fragment;
 
 
 import android.content.Context;
@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.orbitsimulator.R;
+import br.edu.ucsal.sergiolj.orbitSimulator.R;
 import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 

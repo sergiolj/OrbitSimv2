@@ -1,4 +1,4 @@
-package com.example.orbitsimulator.util;
+package br.edu.ucsal.sergiolj.orbitSimulator.util;
 
 public class PolarCoordinates{
     private double radius;

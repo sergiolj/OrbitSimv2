@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:visibility="visible"
-    tools:context=".MainActivity">
+    tools:context="br.edu.ucsal.sergiolj.orbitSimulator.MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

@@ -1,4 +1,4 @@
-package com.example.orbitsimulator;
+package br.edu.ucsal.sergiolj.orbitSimulator;
 
 import android.content.Context;
 

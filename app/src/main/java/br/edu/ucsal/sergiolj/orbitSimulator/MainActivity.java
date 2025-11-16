@@ -1,4 +1,4 @@
-package com.example.orbitsimulator;
+package br.edu.ucsal.sergiolj.orbitSimulator;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +13,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.orbitsimulator.canvas.GeometryCanvas;
-import com.example.orbitsimulator.fragment.SettingsFragment;
-import com.example.orbitsimulator.geometry.Geometry;
+import br.edu.ucsal.sergiolj.orbitSimulator.canvas.GeometryCanvas;
+import br.edu.ucsal.sergiolj.orbitSimulator.fragment.SettingsFragment;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
+
+import br.edu.ucsal.sergiolj.orbitSimulator.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class MainActivity extends AppCompatActivity implements SettingsFragment.OnSettingsSelectedListener {
