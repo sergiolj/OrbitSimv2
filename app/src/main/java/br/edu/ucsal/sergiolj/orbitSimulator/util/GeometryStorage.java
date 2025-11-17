@@ -72,4 +72,43 @@ public class GeometryStorage {
             geometry.getGeometrySet().add(e);
         }
     }
+
+    // ------------------- EXTRA UI SETTINGS --------------------
+public static void saveUI(Context ctx, int color, float velocity, int minSize, int maxSize) {
+    SharedPreferences.Editor editor =
+            ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit();
+
+    editor.putInt("ui_color", color);
+    editor.putFloat("ui_velocity", velocity);
+    editor.putInt("ui_minSize", minSize);
+    editor.putInt("ui_maxSize", maxSize);
+
+    editor.apply();
+}
+
+    public static UISettings loadUI(Context ctx) {
+         SharedPreferences prefs =
+                ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+        int color = prefs.getInt("ui_color", 0xFFFFFF);
+        float velocity = prefs.getFloat("ui_velocity", 0.5f);
+        int minSize = prefs.getInt("ui_minSize", 10);
+        int maxSize = prefs.getInt("ui_maxSize", 40);
+
+        return new UISettings(color, velocity, minSize, maxSize);
+    }
+    public static class UISettings {
+        public int color;
+        public float velocity;
+        public int minSize;
+         public int maxSize;
+
+        public UISettings(int color, float velocity, int minSize, int maxSize) {
+            this.color = color;
+            this.velocity = velocity;
+            this.minSize = minSize;
+            this.maxSize = maxSize;
+        }
+    }
+
 }
