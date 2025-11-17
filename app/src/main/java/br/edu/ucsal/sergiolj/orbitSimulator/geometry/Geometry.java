@@ -147,6 +147,14 @@ public class Geometry {
         return orbitRadius;
     }
 
+    public double getDisplacementSum() {
+    return displacementSum;
+    }
+
+    public Supplier<ElementTypes> getElementFactory() {
+    return elementFactory;
+  }
+
     //SETTERS
     public void setScaleX(double scaleX) {
         this.scaleX = scaleX;
