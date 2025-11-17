@@ -23,6 +23,11 @@ import br.edu.ucsal.sergiolj.orbitSimulator.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class MainActivity extends AppCompatActivity implements SettingsFragment.OnSettingsSelectedListener {
+    private int selectedColor = 0xFFFFFFFF;
+    private float currentVelocity = 1f;
+
+    private SeekBar seekBarMinSize;
+    private SeekBar seekBarMaxSize;
 
     private Geometry geometry;
     private SettingsFragment settingsFragment;
@@ -33,13 +38,6 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     private SeekBar rotationVelocity;
     private GeometryCanvas canva;
     private BottomSheetBehavior<View> bottomSheetBehavior;
-    // valores de UI carregados do storage
-private int selectedColor = 0;
-private float currentVelocity = 0f;
-
-// seekbars que NÃO existiam ainda
-private SeekBar seekBarMinSize;
-private SeekBar seekBarMaxSize;
 
 // objeto de UI carregado
 private GeometryStorage.UISettings ui;
@@ -152,6 +150,8 @@ private View bottomSheet;
 
         seekBarMinSize.setProgress(ui.minSize);
         seekBarMaxSize.setProgress(ui.maxSize);
+        seekBarMinSize = findViewById(R.id.sb_min_size);
+        seekBarMaxSize = findViewById(R.id.sb_max_size);
 
         // se não tinha nada salvo, popula
         if (geometry.getGeometrySet().isEmpty()) {

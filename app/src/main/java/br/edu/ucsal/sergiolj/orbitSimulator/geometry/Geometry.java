@@ -6,6 +6,10 @@ import br.edu.ucsal.sergiolj.orbitSimulator.util.ColorGenerator;
 import br.edu.ucsal.sergiolj.orbitSimulator.util.PolarCoordinates;
 import br.edu.ucsal.sergiolj.orbitSimulator.util.SizeGenerator;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Geometry {
