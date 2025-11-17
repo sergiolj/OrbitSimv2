@@ -19,6 +19,17 @@ import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 public class SettingsFragment extends Fragment {
+    
+    public void setInitialSizeValues(int min, int max) {
+    View view = getView();
+    if (view == null) return;
+
+    SeekBar sbMinSize = view.findViewById(R.id.sb_min_size);
+    SeekBar sbMaxSize = view.findViewById(R.id.sb_max_size);
+
+    sbMinSize.setProgress(min);
+    sbMaxSize.setProgress(max);
+}
 
     private OnSettingsSelectedListener listener;
 

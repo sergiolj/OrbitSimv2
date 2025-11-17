@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 import br.edu.ucsal.sergiolj.orbitSimulator.canvas.GeometryCanvas;
 import br.edu.ucsal.sergiolj.orbitSimulator.fragment.SettingsFragment;
 import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.GeometryStorage;
+
 
 import br.edu.ucsal.sergiolj.orbitSimulator.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -23,7 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public class MainActivity extends AppCompatActivity implements SettingsFragment.OnSettingsSelectedListener {
 
     private Geometry geometry;
-    
+    private SettingsFragment settingsFragment;
     private boolean spinning = false;
     private Handler handler;
     private SeekBar horizontalScale;
@@ -31,6 +33,19 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     private SeekBar rotationVelocity;
     private GeometryCanvas canva;
     private BottomSheetBehavior<View> bottomSheetBehavior;
+    // valores de UI carregados do storage
+private int selectedColor = 0;
+private float currentVelocity = 0f;
+
+// seekbars que NÃO existiam ainda
+private SeekBar seekBarMinSize;
+private SeekBar seekBarMaxSize;
+
+// objeto de UI carregado
+private GeometryStorage.UISettings ui;
+
+// bottomSheet que estava sendo usado mas não declarado
+private View bottomSheet;
 
 
     @Override
@@ -46,6 +61,13 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
         dataInitializer();
         fragmentInitializer();
+
+        bottomSheet.post(() -> {
+        if (settingsFragment != null) {
+            settingsFragment.setInitialSizeValues(ui.minSize, ui.maxSize);
+        }
+        });
+
         interfaceInitializer();
         
         animationControl();
@@ -53,13 +75,16 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
 
     private void fragmentInitializer() {
+        bottomSheet = findViewById(R.id.fragment_settings);
+        SettingsFragment settingsFragment = new SettingsFragment();
 
         getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_settings, new SettingsFragment())
-                .commit();
+        .beginTransaction()
+        .replace(R.id.fragment_settings, settingsFragment)
+        .commit();
 
-        View bottomSheet = findViewById(R.id.fragment_settings);
+
+         View bottomSheet = findViewById(R.id.fragment_settings);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         bottomSheet.post(()->{
@@ -70,14 +95,16 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             bottomSheetBehavior.setHideable(false);
         });
+        
     }
-
     /**
      * INICIALIZA AS FUNCIONALIDADES DE CONTROLES DA INTERFACE COM O USUÁRIO
      *
      */
     private void interfaceInitializer() {
         canva = findViewById(R.id.geometryCanvas);
+        seekBarMinSize = findViewById(R.id.sb_min_size);
+        seekBarMaxSize = findViewById(R.id.sb_max_size);
 
         Button btnStartBoost = findViewById(R.id.btn_start);
         Button btnStop = findViewById(R.id.btn_stop);
@@ -110,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
         // tenta carregar
         GeometryStorage.load(this, geometry);
-        GeometryStorage.UISettings ui = GeometryStorage.loadUI(this);
+        ui = GeometryStorage.loadUI(this);
 
         // restaurar cor selecionada
         selectedColor = ui.color;
@@ -207,9 +234,13 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         });
 
     }
+    private int minSizeValue = 0;
+    private int maxSizeValue = 0;
 
     @Override
     public void onSizeChange(int min, int max) {
+        minSizeValue = min;
+        maxSizeValue = max;
         geometry.updateGeometryElementSize(min, max);
         canva.updateImage();
     }

@@ -151,10 +151,6 @@ public class Geometry {
     return displacementSum;
     }
 
-    public Supplier<ElementTypes> getElementFactory() {
-    return elementFactory;
-  }
-
     //SETTERS
     public void setScaleX(double scaleX) {
         this.scaleX = scaleX;
@@ -169,6 +165,64 @@ public class Geometry {
     public String toString() {
         return geometrySet.toString();
     }
+    public JSONObject toJson() throws JSONException {
+    JSONObject obj = new JSONObject();
+
+    obj.put("scaleX", scaleX);
+    obj.put("scaleY", scaleY);
+    obj.put("displacementSum", displacementSum);
+
+    JSONArray arr = new JSONArray();
+
+    for (Element el : geometrySet) {
+        JSONObject e = new JSONObject();
+        e.put("size", el.getSize());
+        e.put("color", el.getColor());
+
+        PolarCoordinates pc = el.getPosition();
+        JSONObject pos = new JSONObject();
+        pos.put("radius", pc.getRadius());
+        pos.put("angle", pc.getAngle());
+
+        e.put("position", pos);
+
+        arr.put(e);
+    }
+
+    obj.put("elements", arr);
+
+    return obj;
+}
+
+public void fromJson(JSONObject obj) throws JSONException {
+
+    this.scaleX = obj.getDouble("scaleX");
+    this.scaleY = obj.getDouble("scaleY");
+    this.displacementSum = obj.getDouble("displacementSum");
+
+    this.geometrySet.clear();
+
+    JSONArray arr = obj.getJSONArray("elements");
+
+    for (int i = 0; i < arr.length(); i++) {
+        JSONObject e = arr.getJSONObject(i);
+
+        Element element = new Element();
+        element.setSize(e.getInt("size"));
+        element.setColor(e.getInt("color"));
+
+        JSONObject pos = e.getJSONObject("position");
+        element.setPosition(new PolarCoordinates(
+                pos.getDouble("radius"),
+                pos.getDouble("angle")
+        ));
+
+        geometrySet.add(element);
+    }
+
+    // reconstruir orbitas
+    orbitTraceGeometry();
+}
 
 }
 
