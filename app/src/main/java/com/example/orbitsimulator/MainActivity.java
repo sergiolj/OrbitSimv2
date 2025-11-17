@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.orbitsimulator.util.GeometryStorage;
 import com.example.orbitsimulator.canvas.GeometryCanvas;
 import com.example.orbitsimulator.fragment.SettingsFragment;
 import com.example.orbitsimulator.geometry.Element;

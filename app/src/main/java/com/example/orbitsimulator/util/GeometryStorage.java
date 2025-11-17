@@ -27,7 +27,8 @@ private static final String PREF_NAME = "geometry_prefs";
 
         geometry.setScaleX(prefs.getFloat("scaleX", 1.0f));
         geometry.setScaleY(prefs.getFloat("scaleY", 1.0f));
-        geometry.setDisplacementSum(prefs.getFloat("displacementSum", 0f));
+        geometry.move(prefs.getFloat("displacementSum", 0f));
+
 
         int r = prefs.getInt("baseColorR", 50);
         int g = prefs.getInt("baseColorG", 100);
