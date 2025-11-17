@@ -110,6 +110,21 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
         // tenta carregar
         GeometryStorage.load(this, geometry);
+        GeometryStorage.UISettings ui = GeometryStorage.loadUI(this);
+
+        // restaurar cor selecionada
+        selectedColor = ui.color;
+
+        // restaurar velocidade
+        currentVelocity = ui.velocity;
+        rotationVelocity.setProgress((int) (ui.velocity * 100));
+
+        // restaurar min/max tamanho
+        minSizeValue = ui.minSize;
+        maxSizeValue = ui.maxSize;
+
+        seekBarMinSize.setProgress(ui.minSize);
+        seekBarMaxSize.setProgress(ui.maxSize);
 
         // se não tinha nada salvo, popula
         if (geometry.getGeometrySet().isEmpty()) {
@@ -211,15 +226,26 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         canva.updateImage();
     }
 
-    @Override
+   @Override
     protected void onPause() {
         super.onPause();
-        spinning = false;
 
+        spinning = false;
         if (handler != null) handler.removeCallbacksAndMessages(null);
 
-        GeometryStorage.save(this, geometry);
-    }
+        // SALVAR GEOMETRIA COMPLETA
+        GeometryStorage.saveGeometry(this, geometry);
+
+        // SALVAR CONFIGURAÇÕES DA UI
+        GeometryStorage.saveUI(
+                this,
+                selectedColor,      // cor escolhida
+                currentVelocity,    // seekbar de velocidade
+                minSizeValue,       // tamanho mínimo
+                maxSizeValue        // tamanho máximo
+        );
+}
+
 
 
 
