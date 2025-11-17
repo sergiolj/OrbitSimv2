@@ -203,9 +203,16 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     @Override
     protected void onPause() {
         super.onPause();
-        spinning = false;
         if(handler != null){
             handler.removeCallbacksAndMessages(null);
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (spinning) {      // Se estava rodando antes da pausa
+            animationControl();  // Reinicia o loop
         }
     }
 
