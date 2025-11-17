@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     @Override
     protected void onPause() {
         super.onPause();
+
         if(handler != null){
             handler.removeCallbacksAndMessages(null);
         }
