@@ -105,16 +105,18 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     private void dataInitializer() {
         geometry = Geometry.getInstance();
 
-        // TENTAR CARREGAR
-        GeometryStorage.loadGeometry(this, geometry);
+        // cria orbitas, mas não cria elementos ainda
+        geometry.orbitTraceGeometry();
 
-        // SE NAO EXISTE SALVO, CRIAR NOVO
+        // tenta carregar
+        GeometryStorage.load(this, geometry);
+
+        // se não tinha nada salvo, popula
         if (geometry.getGeometrySet().isEmpty()) {
-            geometry.orbitTraceGeometry();
             geometry.populateGeometrySet();
         }
-
     }
+
 
 
     /**
@@ -210,16 +212,15 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     }
 
     @Override
-protected void onPause() {
-    super.onPause();
+    protected void onPause() {
+        super.onPause();
+        spinning = false;
 
-    GeometryStorage.saveGeometry(this, geometry);
+        if (handler != null) handler.removeCallbacksAndMessages(null);
 
-    spinning = false;
-    if(handler != null){
-        handler.removeCallbacksAndMessages(null);
+        GeometryStorage.save(this, geometry);
     }
-}
+
 
 
 
