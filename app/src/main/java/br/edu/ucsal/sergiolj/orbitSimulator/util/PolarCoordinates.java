@@ -1,16 +1,22 @@
-package com.example.orbitsimulator.util;
+package br.edu.ucsal.sergiolj.orbitSimulator.util;
 
-public class PolarCoord {
+public class PolarCoordinates{
     private double radius;
     private double angle;
 
-    public PolarCoord(double radius, double angle) {
+    public PolarCoordinates(double radius, double angle) {
         this.radius = radius;
         this.angle = angle;
     }
-    public PolarCoord(){
+    public PolarCoordinates(){
         this.radius = 0;
         this.angle = 0;
+    }
+
+    public PolarCoordinates setPolarCoordinates(double radius, double angle){
+        this.radius = radius;
+        this.angle = angle;
+        return this;
     }
 
     public double getAngle() {
@@ -24,6 +30,7 @@ public class PolarCoord {
     public void setAngle(double angle) {
         this.angle = angle;
     }
+
 
     public double getRadius() {
         return radius;

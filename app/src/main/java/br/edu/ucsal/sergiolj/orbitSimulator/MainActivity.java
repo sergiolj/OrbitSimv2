@@ -1,4 +1,4 @@
-package com.example.orbitsimulator;
+package br.edu.ucsal.sergiolj.orbitSimulator;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,14 +13,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.orbitsimulator.util.GeometryStorage;
-import com.example.orbitsimulator.canvas.GeometryCanvas;
-import com.example.orbitsimulator.fragment.SettingsFragment;
-import com.example.orbitsimulator.geometry.Element;
-import com.example.orbitsimulator.geometry.Geometry;
-import com.example.orbitsimulator.util.ColorRGB;
+import br.edu.ucsal.sergiolj.orbitSimulator.canvas.GeometryCanvas;
+import br.edu.ucsal.sergiolj.orbitSimulator.fragment.SettingsFragment;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
+
+import br.edu.ucsal.sergiolj.orbitSimulator.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.skydoves.colorpickerview.ColorPickerView;
 
 public class MainActivity extends AppCompatActivity implements SettingsFragment.OnSettingsSelectedListener {
 
@@ -46,12 +44,11 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
             return insets;
         });
 
+        dataInitializer();
         fragmentInitializer();
         interfaceInitializer();
-        dataInitializer();
-        GeometryStorage.loadGeometry(this, geometry);
+        
         animationControl();
-
     }
 
 
@@ -80,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
      *
      */
     private void interfaceInitializer() {
+        canva = findViewById(R.id.geometryCanvas);
+
         Button btnStartBoost = findViewById(R.id.btn_start);
         Button btnStop = findViewById(R.id.btn_stop);
         Button btnExit = findViewById(R.id.btn_exit);
@@ -104,12 +103,9 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
      * INICIALIZA AS REFERÊNCIAS DOS DADOS GEOMÉTRICOS A SEREM UTILIZADOS NO SISTEMA
      */
     private void dataInitializer() {
-        canva = findViewById(R.id.geometryCanvas);
-
         geometry = Geometry.getInstance();
-
-        geometry.populateGeometrySet();
         geometry.orbitTraceGeometry();
+        geometry.populateGeometrySet();
     }
 
 
@@ -189,15 +185,19 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
 
     @Override
     public void onSizeChange(int min, int max) {
-        geometry.updateGeometrySize(min, max);
+        geometry.updateGeometryElementSize(min, max);
         canva.updateImage();
     }
 
     @Override
     public void onColorSelected(int color) {
-        ColorRGB.fromInt(color);
-        geometry.setBasePalette(ColorRGB.fromInt(color));
-        geometry.updateGeometryColor();
+        geometry.updateGeometryColor(color);
+        canva.updateImage();
+    }
+
+    @Override
+    public void onResetColor() {
+        geometry.resetColor();
         canva.updateImage();
     }
 

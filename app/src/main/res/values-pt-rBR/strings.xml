@@ -15,4 +15,5 @@
     <string name="maximum">Máximo</string>
     <string name="configuration">Configuração</string>
     <string name="apply_changes">Atualizar Tamanho</string>
+    <string name="reset_color">Redefinir Cores</string>
 </resources>

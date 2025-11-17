@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.orbitsimulator.canvas.GeometryCanvas
+    <br.edu.ucsal.sergiolj.orbitSimulator.canvas.GeometryCanvas
         android:id="@+id/geometryCanvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

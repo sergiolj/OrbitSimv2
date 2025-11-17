@@ -1,4 +1,4 @@
-package com.example.orbitsimulator.canvas;
+package br.edu.ucsal.sergiolj.orbitSimulator.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,13 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.orbitsimulator.geometry.Element;
-import com.example.orbitsimulator.geometry.Geometry;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Element;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,6 @@ public class GeometryCanvas extends View {
     private int viewWidth;
     private int viewHeight;
 
-    private BrushSettings settings;
     private Paint paintOrbit;
     private Paint paintElements;
     private Geometry geometry;
@@ -35,7 +35,6 @@ public class GeometryCanvas extends View {
 
     public GeometryCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        settings = new BrushSettings();
 
         this.paintOrbit = new Paint();
         this.paintOrbit.setColor(Color.LTGRAY);
@@ -46,10 +45,6 @@ public class GeometryCanvas extends View {
         this.paintElements.setStyle(Paint.Style.FILL_AND_STROKE);
 
         this.geometry = Geometry.getInstance();
-    }
-
-    public void setBrushSettings(BrushSettings settings){
-        this.settings = settings;
     }
 
 
@@ -80,10 +75,11 @@ public class GeometryCanvas extends View {
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
+        super.onDraw(canvas);
+
         canvas.drawColor(Color.BLACK);
         geometry.updateGeometrySet();
 
-        super.onDraw(canvas);
         this.xCenterOfView = viewWidth / 2f;
         this.yCenterOfView = viewHeight / 2f;
         drawOrbits(canvas);
@@ -98,7 +94,7 @@ public class GeometryCanvas extends View {
         canvas.save();
         canvas.scale(sx,sy, xCenterOfView, yCenterOfView);
         float r;
-        ArrayList<Double> orbit = geometry.orbitTraceGeometry();
+        ArrayList<Double> orbit = geometry.getOrbitRadius();
         for (Double element : orbit) {
             r = (float) element.doubleValue();
             canvas.drawCircle(xCenterOfView,yCenterOfView,r,paintOrbit);
@@ -125,7 +121,10 @@ public class GeometryCanvas extends View {
             x = (float) (xCenterOfView + sx * r * Math.cos(teta));
             y = (float) (yCenterOfView - sy * r * Math.sin(teta));
 
-            paintElements.setColor(Color.parseColor(element.getColor().toString()));
+            paintElements.setColor(element.getColor());
+            Log.d("DEBUG ALPHA", "Paint alpha = " + paintElements.getAlpha());
+            Log.d("DEBUG COLOR", "Paint color = " + paintElements.getColor());
+
             canvas.drawCircle(x, y, (float) element.getSize(), paintElements);
        }
     }
@@ -165,7 +164,7 @@ public class GeometryCanvas extends View {
              * representação das arestas.
              * O ponto 0,0 é determinado pelo centro
              */
-            paintElements.setColor(Color.parseColor(element.getColor().toString()));
+            paintElements.setColor(element.getColor());
             canvas.drawRect(coordLeftX, coordTopY, coordRightX, coordBottomY, paintElements);
         }
     }

@@ -1,22 +1,25 @@
-package com.example.orbitsimulator.geometry;
+package br.edu.ucsal.sergiolj.orbitSimulator.geometry;
 
 import androidx.annotation.NonNull;
 
-import com.example.orbitsimulator.util.ColorRGB;
-import com.example.orbitsimulator.util.PolarCoord;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.ColorGenerator;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.PolarCoordinates;
+import br.edu.ucsal.sergiolj.orbitSimulator.util.SizeGenerator;
 
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class Geometry {
     private static Geometry instance = null;
 
-    private static final int NUMBER_OF_ELEMENTS = 1;
-    private static final int NUMBER_OF_STRUCTURES = 10;
-    private static final double MAX_RADIUS = 1000;
-    private ColorRGB basePalette = new ColorRGB();
+    private final int NUMBER_OF_ELEMENTS = 1;
+    private final int NUMBER_OF_STRUCTURES = 18;
+    private final double MAX_RADIUS = 1000;
+
+    private int elementMinSize = 5;
+    private int elementMaxSize = 25;
 
     private final ArrayList<Element> geometrySet;
+    private final ArrayList<Double> orbitRadius;
 
     private double displacementSum;
 
@@ -26,6 +29,7 @@ public class Geometry {
     //PRIVATE CONSTRUCTOR SINGLETON
     private Geometry(){
         this.geometrySet = new ArrayList<>();
+        this.orbitRadius = new ArrayList<>();
     }
 
     //GETTER SINGLETON
@@ -38,8 +42,6 @@ public class Geometry {
 
     /**
      * CRIAÇÃO DO ELEMENTO PARA O DESENHO DOS OBJETOS NAS ÓRBITAS
-     * Para adicionar uma flexibilidade de tipos geométricos foi necessário criar essa função para
-     * possibilitar a injeção do objeto que será criado.
      */
     public void populateGeometrySet() {
        this.scaleX = 1.0F;
@@ -50,16 +52,20 @@ public class Geometry {
 
        this.geometrySet.clear();
 
+       ColorGenerator cg = new ColorGenerator();
+       SizeGenerator sg = new SizeGenerator(elementMinSize,elementMaxSize);
+
         for(int i = 1; i <= NUMBER_OF_STRUCTURES; i++){
-            for(int j = 1; j <= NUMBER_OF_ELEMENTS; j++){
+            for(int j = 1; j == NUMBER_OF_ELEMENTS; j++){
                 Element element = new Element();
                 radius = i * MAX_RADIUS / NUMBER_OF_STRUCTURES;
                 angleTeta = (j - 1) * 2 * Math.PI / NUMBER_OF_ELEMENTS;
 
-                element.setPosition(new PolarCoord(radius,angleTeta));
-                element.setColor(basePalette.genColor(basePalette,basePalette.getVariance()));
+                element.setPosition(new PolarCoordinates(radius, angleTeta));
+                element.setColor(cg.genRandColor());
+                //Log.d("ELEMENT COLOR", "Element color: "+ element.getColor());
+                element.setSize(sg.genSize());
                 this.geometrySet.add(element);
-
             }
         }
     }
@@ -69,16 +75,13 @@ public class Geometry {
      * Cria um array de double com a distância do centro da geometria até cada uma de suas órbitas.
      * @return orbit array from structure.
      */
-    public ArrayList<Double> orbitTraceGeometry() {
-        ArrayList<Double> orbit = new ArrayList<>();
-        int size = NUMBER_OF_ELEMENTS * NUMBER_OF_STRUCTURES;
+    public void orbitTraceGeometry() {
         double radius;
-        orbit.clear();
-        for(int i=1; i <= size; i += NUMBER_OF_ELEMENTS){
+        this.orbitRadius.clear();
+        for(int i=1; i <= NUMBER_OF_STRUCTURES; i++){
             radius = i * MAX_RADIUS / NUMBER_OF_STRUCTURES;
-            orbit.add(radius);
+            orbitRadius.add(radius);
         }
-        return orbit;
     }
 
     /**
@@ -98,23 +101,32 @@ public class Geometry {
      */
     public void updateGeometrySet(){
             for(Element element : this.geometrySet){
-                PolarCoord oldPos = element.getPosition();
+                PolarCoordinates oldPos = element.getPosition();
                 double newAngle = oldPos.getAngle() + displacementSum/ oldPos.getRadius();
                 oldPos.setAngle(newAngle);
             }
     }
 
-    public void updateGeometryColor(){
+    //MÉTODOS DE ATUALIZAÇÃO DE DADOS USADOS PELO LISTENER DA FRAGMENT
+
+    public void updateGeometryColor(int selectColor){
+        ColorGenerator cg = new ColorGenerator();
         for(Element element: this.geometrySet){
-            element.setColor(basePalette.genColor(basePalette,25));
+            element.setColor(cg.genColorTones(selectColor));
         }
     }
 
-    public void updateGeometrySize(int min, int max){
+    public void updateGeometryElementSize(int min, int max){
+        SizeGenerator sg = new SizeGenerator(min, max);
         for(Element element: this.geometrySet){
-            element.setMinSize(min);
-            element.setMaxSize(max);
-            element.setSize(element.genSize());
+            element.setSize(sg.genSize());
+        }
+    }
+
+    public void resetColor(){
+        ColorGenerator cg = new ColorGenerator();
+        for(Element element: this.geometrySet){
+            element.setColor(cg.genRandColor());
         }
     }
 
@@ -126,8 +138,13 @@ public class Geometry {
     public double getScaleX() {
         return scaleX;
     }
+
     public double getScaleY() {
         return scaleY;
+    }
+
+    public ArrayList<Double> getOrbitRadius() {
+        return orbitRadius;
     }
 
     //SETTERS
@@ -137,10 +154,6 @@ public class Geometry {
 
     public void setScaleY(double scaleY) {
         this.scaleY = scaleY;
-    }
-
-    public void setBasePalette(ColorRGB basePalette) {
-        this.basePalette = basePalette;
     }
 
     @NonNull
