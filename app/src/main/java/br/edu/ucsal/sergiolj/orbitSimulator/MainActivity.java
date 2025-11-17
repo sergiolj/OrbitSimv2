@@ -104,8 +104,16 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
      */
     private void dataInitializer() {
         geometry = Geometry.getInstance();
-        geometry.orbitTraceGeometry();
-        geometry.populateGeometrySet();
+
+        // TENTAR CARREGAR
+        GeometryStorage.loadGeometry(this, geometry);
+
+        // SE NAO EXISTE SALVO, CRIAR NOVO
+        if (geometry.getGeometrySet().isEmpty()) {
+            geometry.orbitTraceGeometry();
+            geometry.populateGeometrySet();
+        }
+
     }
 
 
@@ -202,21 +210,17 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
     }
 
     @Override
-    protected void onPause() {
-        GeometryStorage.saveGeometry(
-            this,
-            geometry.getScaleX(),
-            geometry.getScaleY(),
-            0, // ou geometry.getDisplacementSum() se quiser salvar a velocidade
-            new ColorRGB(50,100,200) // ou geometry.getBasePalette()
-        );
+protected void onPause() {
+    super.onPause();
 
-        super.onPause();
-        spinning = false;
-        if(handler != null){
-            handler.removeCallbacksAndMessages(null);
-        }
+    GeometryStorage.saveGeometry(this, geometry);
+
+    spinning = false;
+    if(handler != null){
+        handler.removeCallbacksAndMessages(null);
     }
+}
+
 
 
 //    TRECHO DE CÓDIGO USADO APENAS PARA DEBUG MANTIDO COMO EXEMPLO PARA USOS FUTUROS
