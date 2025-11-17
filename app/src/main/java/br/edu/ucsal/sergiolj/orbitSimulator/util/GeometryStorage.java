@@ -5,37 +5,34 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 
-import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
 import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Element;
-import br.edu.ucsal.sergiolj.orbitSimulator.util.PolarCoordinates;
+import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
 
 public class GeometryStorage {
 
-    private static final String PREF_NAME = "geometry_prefs";
+    private static final String PREF = "geometry_prefs";
 
-    public static void saveGeometry(Context context, Geometry geometry) {
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+    public static void save(Context ctx, Geometry geometry) {
 
+        SharedPreferences.Editor editor =
+                ctx.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit();
+
+        // --- GLOBAIS ---
         editor.putFloat("scaleX", (float) geometry.getScaleX());
         editor.putFloat("scaleY", (float) geometry.getScaleY());
-        editor.putFloat("velocity", (float) geometry.getDisplacementSum());
+        editor.putFloat("displacement", (float) geometry.getDisplacementSum());
 
         ArrayList<Element> list = geometry.getGeometrySet();
         editor.putInt("count", list.size());
 
         for (int i = 0; i < list.size(); i++) {
+
             Element e = list.get(i);
 
-            PolarCoordinates p = e.getPosition();
+            editor.putFloat("radius_" + i, (float) e.getPosition().getRadius());
+            editor.putFloat("angle_" + i, (float) e.getPosition().getAngle());
 
-            editor.putFloat("radius_" + i, (float) p.getRadius());
-            editor.putFloat("angle_" + i, (float) p.getAngle());
-
-            editor.putInt("r_" + i, e.getColor().getRed());
-            editor.putInt("g_" + i, e.getColor().getGreen());
-            editor.putInt("b_" + i, e.getColor().getBlue());
-
+            editor.putInt("color_" + i, e.getColor());
             editor.putInt("size_" + i, e.getSize());
         }
 
@@ -43,32 +40,33 @@ public class GeometryStorage {
     }
 
 
-    public static void loadGeometry(Context context, Geometry geometry) {
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    public static void load(Context ctx, Geometry geometry) {
+
+        SharedPreferences prefs =
+                ctx.getSharedPreferences(PREF, Context.MODE_PRIVATE);
 
         int count = prefs.getInt("count", -1);
         if (count == -1) return;
 
+        // GLOBAIS
         geometry.setScaleX(prefs.getFloat("scaleX", 1f));
         geometry.setScaleY(prefs.getFloat("scaleY", 1f));
-        geometry.move(prefs.getFloat("velocity", 0f));
+        geometry.move(prefs.getFloat("displacement", 0f));
 
+        // Elementos
         geometry.getGeometrySet().clear();
 
         for (int i = 0; i < count; i++) {
+
             Element e = new Element();
 
-            float radius = prefs.getFloat("radius_" + i, 0f);
-            float angle = prefs.getFloat("angle_" + i, 0f);
-
-            int r = prefs.getInt("r_" + i, 255);
-            int g = prefs.getInt("g_" + i, 255);
-            int b = prefs.getInt("b_" + i, 255);
-
+            double r = prefs.getFloat("radius_" + i, 0f);
+            double a = prefs.getFloat("angle_" + i, 0f);
+            int color = prefs.getInt("color_" + i, 0xFFFFFF);
             int size = prefs.getInt("size_" + i, 20);
 
-            e.setPosition(new PolarCoordinates(radius, angle));
-            e.setColor(new java.awt.Color(r, g, b));
+            e.setPosition(new PolarCoordinates(r, a));
+            e.setColor(color);
             e.setSize(size);
 
             geometry.getGeometrySet().add(e);
