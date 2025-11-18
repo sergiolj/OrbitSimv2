@@ -131,6 +131,14 @@ public class Geometry {
     }
 
     //GETTERS
+    public int getElementMinSize() {
+        return elementMinSize;
+    }
+
+    public int getElementMaxSize() {
+        return elementMaxSize;
+    }
+
     public ArrayList<Element> getGeometrySet() {
         return geometrySet;
     }

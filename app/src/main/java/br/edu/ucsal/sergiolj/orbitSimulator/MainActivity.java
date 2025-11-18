@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import br.edu.ucsal.sergiolj.orbitSimulator.util.UIStorage;
 import br.edu.ucsal.sergiolj.orbitSimulator.canvas.GeometryCanvas;
 import br.edu.ucsal.sergiolj.orbitSimulator.fragment.SettingsFragment;
 import br.edu.ucsal.sergiolj.orbitSimulator.geometry.Geometry;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         dataInitializer();
         fragmentInitializer();
         interfaceInitializer();
+
+        restorePreferences();
+
         animationControl();
     }
 
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
      * INICIALIZA A THREAD QUE CONTROLA A ANIMAÇÃO/ ATUALIZAÇÃO DAS POSIÇÕES DAS ÓRBITAS
      */
     private void animationControl() {
+        if (handler != null) handler.removeCallbacksAndMessages(null);
         handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
@@ -131,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
      * (interface funcional) o seekbar possui três métodos (interface não-funcional), o que impede o
      * uso de lambda para a implementação, pois todos os métodos da classe
      * tem que ser sobreescritos, mesmo que sem funcionalidades.
-     *
      * A implementação dessa forma permite que a escala do canva seja alterada pelo usuário mesmo
      * que a atualização das posições das órbitas não esteja sendo executada.
      */
@@ -199,14 +203,47 @@ public class MainActivity extends AppCompatActivity implements SettingsFragment.
         geometry.resetColor();
         canva.updateImage();
     }
+    private void restorePreferences() {
+    geometry.setScaleX(UIStorage.getScaleX(this, 1.0f));
+    geometry.setScaleY(UIStorage.getScaleY(this, 1.0f));
+
+
+    int savedSpeed = UIStorage.getRotationSpeed(this, 10);
+    int savedMin = UIStorage.getMinSize(this, 5);
+    int savedMax = UIStorage.getMaxSize(this, 25);
+    int savedColor = UIStorage.getColor(this, 0xFF00FFFF);
+
+    // Ensure seekbars are initialized
+    if (rotationVelocity != null) rotationVelocity.setProgress(savedSpeed);
+    geometry.updateGeometryElementSize(savedMin, savedMax);
+    geometry.updateGeometryColor(savedColor);
+
+    canva.updateImage();
+}
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if(handler != null){
-            handler.removeCallbacksAndMessages(null);
-        }
+        int color = 0xFFFFFFFF;
+    if (!geometry.getGeometrySet().isEmpty()) {
+        color = geometry.getGeometrySet().get(0).getColor();
+    }
+
+    UIStorage.save(
+        this,
+        (float) geometry.getScaleX(),
+        (float) geometry.getScaleY(),
+        rotationVelocity != null ? rotationVelocity.getProgress() : 0,
+        geometry.getElementMinSize(),
+        geometry.getElementMaxSize(),
+        color
+    );
+
+    if (handler != null) {
+        handler.removeCallbacksAndMessages(null);
+    }
+
     }
     @Override
     protected void onResume() {
